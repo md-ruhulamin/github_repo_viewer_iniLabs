@@ -10,7 +10,7 @@ class AppTheme {
   static const Color textLightColor = Color(0xFFE0E0E0);
   static const Color greyColor = Color(0xFF757575);
 
-  // Light Theme
+
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -80,7 +80,6 @@ class AppTheme {
     ),
   );
 
-  // Dark Theme
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,

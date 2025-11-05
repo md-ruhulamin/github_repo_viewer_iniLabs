@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:github_repo_viewer/core/theme/theme_services.dart';
+import 'package:github_repo_viewer/core/utils/data_formatter.dart';
 import 'package:github_repo_viewer/data/models/repo_model.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,11 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class GithubDetails extends StatelessWidget {
   final RepoModel repoModel;
 
-  const GithubDetails({super.key, required this.repoModel});
-
-  String _formatDate(DateTime date) {
-    return DateFormat('MMM dd, yyyy').format(date);
-  }
+  GithubDetails({super.key, required this.repoModel});
 
   Future<void> _launchUrl(String url) async {
     final Uri uri = Uri.parse(url);
@@ -19,36 +17,53 @@ class GithubDetails extends StatelessWidget {
     }
   }
 
+  final ThemeService themeService = ThemeService();
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           // App Bar
           SliverAppBar(
-            expandedHeight: 120,
             pinned: true,
             elevation: 0,
             backgroundColor: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            ),
+
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                repoModel.name,
+                "Repository Details",
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: isDark ? const Color(0xFFE0E0E0) : const Color(0xFF212121),
+                  color: isDark
+                      ? const Color(0xFFE0E0E0)
+                      : const Color(0xFF212121),
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 24,
                 ),
               ),
               centerTitle: false,
               titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
             ),
+            actions: [
+              // Theme Toggle
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    themeService.isSavedDarkMode()
+                        ? Icons.light_mode
+                        : Icons.dark_mode,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    themeService.changeThemeMode();
+                  },
+                ),
+              ),
+            ],
           ),
 
           // Content
@@ -81,7 +96,9 @@ class GithubDetails extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: isDark ? const Color(0xFFE0E0E0) : const Color(0xFF212121),
+                                      color: isDark
+                                          ? const Color(0xFFE0E0E0)
+                                          : const Color(0xFF212121),
                                     ),
                                   ),
                                   if (repoModel.private)
@@ -119,7 +136,9 @@ class GithubDetails extends StatelessWidget {
                             repoModel.description!,
                             style: TextStyle(
                               fontSize: 15,
-                              color: isDark ? const Color(0xFFE0E0E0).withOpacity(0.8) : const Color(0xFF757575),
+                              color: isDark
+                                  ? const Color(0xFFE0E0E0).withOpacity(0.8)
+                                  : const Color(0xFF757575),
                               height: 1.5,
                             ),
                           ),
@@ -178,7 +197,9 @@ class GithubDetails extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? const Color(0xFFE0E0E0) : const Color(0xFF212121),
+                            color: isDark
+                                ? const Color(0xFFE0E0E0)
+                                : const Color(0xFF212121),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -189,7 +210,8 @@ class GithubDetails extends StatelessWidget {
                             label: 'Language',
                             value: repoModel.language!,
                           ),
-                        if (repoModel.language != null) const SizedBox(height: 12),
+                        if (repoModel.language != null)
+                          const SizedBox(height: 12),
                         _buildInfoRow(
                           context,
                           icon: Icons.bug_report_outlined,
@@ -204,19 +226,27 @@ class GithubDetails extends StatelessWidget {
                             label: 'Default Branch',
                             value: repoModel.defaultBranch!,
                           ),
-                        if (repoModel.defaultBranch != null) const SizedBox(height: 12),
+                        if (repoModel.defaultBranch != null)
+                          const SizedBox(height: 12),
                         _buildInfoRow(
                           context,
                           icon: Icons.calendar_today,
                           label: 'Created',
-                          value: _formatDate(repoModel.createdAt),
+                          value: formatDate(repoModel.createdAt),
                         ),
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           context,
                           icon: Icons.update,
                           label: 'Last Updated',
-                          value: _formatDate(repoModel.updatedAt),
+                          value: formatDate(repoModel.updatedAt),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildInfoRow(
+                          context,
+                          icon: Icons.link,
+                          label: 'Url',
+                          value: repoModel.htmlUrl,
                         ),
                       ],
                     ),
@@ -262,9 +292,9 @@ class GithubDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.09),
             blurRadius: 10,
-            offset: const Offset(0, 2),
+            offset: const Offset(-2, 2),
           ),
         ],
       ),
@@ -287,9 +317,9 @@ class GithubDetails extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: const Offset(0, 2),
+            offset: const Offset(-2, 2),
           ),
         ],
       ),
@@ -310,7 +340,9 @@ class GithubDetails extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: isDark ? const Color(0xFFE0E0E0).withOpacity(0.6) : const Color(0xFF757575),
+              color: isDark
+                  ? const Color(0xFFE0E0E0).withOpacity(0.6)
+                  : const Color(0xFF757575),
             ),
           ),
         ],
@@ -327,17 +359,15 @@ class GithubDetails extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: const Color(0xFF3AA1EE),
-        ),
+        Icon(icon, size: 20, color: const Color(0xFF3AA1EE)),
         const SizedBox(width: 12),
         Text(
           '$label:',
           style: TextStyle(
             fontSize: 14,
-            color: isDark ? const Color(0xFFE0E0E0).withOpacity(0.7) : const Color(0xFF757575),
+            color: isDark
+                ? const Color(0xFFE0E0E0).withOpacity(0.7)
+                : const Color(0xFF757575),
           ),
         ),
         const SizedBox(width: 8),
