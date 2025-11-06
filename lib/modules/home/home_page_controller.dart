@@ -34,7 +34,7 @@ class HomeController extends GetxController {
     errorMessage.value = '';
 
     try {
-      final repos = await _apiService.getUserRepos(user.value!.login);
+      final repos = await _apiService.getUserRepos(user.value!.login!);
       allRepos.value = repos;
       applySorting();
     } catch (e) {

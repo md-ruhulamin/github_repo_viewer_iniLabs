@@ -83,7 +83,7 @@ class UserInputPage extends StatelessWidget {
                 onSubmitted: (_) => controller.searchUser(),
               ),
         
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
         
               // Error Message
               Obx(() {
