@@ -27,16 +27,16 @@ class UserInputPage extends StatelessWidget {
                 themeService.changeThemeMode();
               },
             ),
-          ),SizedBox(width: 20,)
+          ),
+          SizedBox(width: 20),
         ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
-           
             children: [
-            SizedBox(height: 30,),
+              SizedBox(height: 30),
               // GitHub Logo
               Container(
                 width: 100,
@@ -45,14 +45,21 @@ class UserInputPage extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(Icons.code, size: 50, color: Colors.white),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/github-logo.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
-        
+
               const SizedBox(height: 32),
-        
+
               // Title
               Text(
-                'GitHub Repository Viewer',
+                'GitHub \nRepository Viewer',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -60,18 +67,18 @@ class UserInputPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-        
+
               const SizedBox(height: 16),
-        
+
               // Subtitle
               Text(
                 'Enter a GitHub username to explore repositories',
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
-        
+
               const SizedBox(height: 15),
-        
+
               // Username Input
               TextField(
                 controller: controller.usernameController,
@@ -82,9 +89,9 @@ class UserInputPage extends StatelessWidget {
                 onChanged: (_) => controller.clearError(),
                 onSubmitted: (_) => controller.searchUser(),
               ),
-        
+
               const SizedBox(height: 10),
-        
+
               // Error Message
               Obx(() {
                 if (controller.errorMessage.value.isNotEmpty) {
@@ -111,9 +118,9 @@ class UserInputPage extends StatelessWidget {
                 }
                 return const SizedBox.shrink();
               }),
-        
+
               const SizedBox(height: 5),
-        
+
               // Search Button
               Obx(() {
                 return SizedBox(

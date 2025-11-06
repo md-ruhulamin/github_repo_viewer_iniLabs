@@ -53,6 +53,7 @@ class UserInputController extends GetxController {
       // Navigate to home page with user info
       Get.to(() => HomePage(), arguments: userInfo);
     } catch (e) {
+      print("Error: $e");
       errorMessage.value = e.toString().replaceAll('Exception: ', '');
     } finally {
       isLoading.value = false;

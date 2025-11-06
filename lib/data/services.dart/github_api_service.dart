@@ -10,8 +10,8 @@ class GithubApiService {
     _dio = Dio(
       BaseOptions(
         baseUrl: AppConstants.baseUrl,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 20),
         headers: {
           'Accept': 'application/vnd.github.v3+json',
         },
@@ -44,6 +44,7 @@ class GithubApiService {
         );
       }
     } on DioException catch (e) {
+      print("DDDDDDDDDDDDDDDDDDDDDDDDDDIO DioException $e");
       if (e.response?.statusCode == 404) {
         throw Exception(AppConstants.userNotFound);
       } else if (e.type == DioExceptionType.connectionTimeout ||
@@ -92,6 +93,7 @@ class GithubApiService {
         throw Exception(AppConstants.genericError);
       }
     } catch (e) {
+      print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError $e");
       throw Exception(AppConstants.genericError);
     }
   }
